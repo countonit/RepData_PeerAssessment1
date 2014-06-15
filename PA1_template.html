@@ -332,6 +332,7 @@ library(&quot;lattice&quot;)
 <pre><code class="r">weekday=subset(data, data$weekdays==&quot;Weekday&quot;)
 weekend=subset(data, data$weekdays==&quot;Weekend&quot;)
 
+#Create the plots (just used the base plotting system so it is not as fancy as lattice, but does show both line graphs)
 par(mfrow=c(2,1))
 avgstepsWD=aggregate(steps~interval, weekday, FUN=mean)
 avgstepsWE=aggregate(steps~interval, weekend, FUN=mean)

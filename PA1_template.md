@@ -135,6 +135,7 @@ median(totalbydayImp$imp)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
+
 ```r
 #Redo Histogram, mean and median with the imputed values
 #Create a total of steps by day, then plot the histogram
@@ -177,6 +178,7 @@ library("lattice")
 weekday=subset(data, data$weekdays=="Weekday")
 weekend=subset(data, data$weekdays=="Weekend")
 
+#Create the plots (just used the base plotting system so it is not as fancy as lattice, but does show both line graphs)
 par(mfrow=c(2,1))
 avgstepsWD=aggregate(steps~interval, weekday, FUN=mean)
 avgstepsWE=aggregate(steps~interval, weekend, FUN=mean)
