@@ -3,11 +3,13 @@
 ## Loading and preprocessing the data
 
 Download and unzip the file
-```{r}
+```{r loaddata}
+setInternet2(use = TRUE)
 temp <- tempfile()
 download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip",temp)
-data <- read.csv(unz(temp, "activity.csv"), na.strings="NA", stringsAsFactors + )
+data <- read.csv(unz(temp, "activity.csv"), na.strings="NA")
 unlink(temp)
+
 ```
 
 convert "date" to a date field
@@ -89,4 +91,34 @@ median(totalbydayImp$imp)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r}
+#Redo Histogram, mean and median with the imputed values
+#Create a total of steps by day, then plot the histogram
+totalbydayImp=aggregate(imp~date, imputed, FUN=sum)
+hist(totalbydayImp$imp)
 
+#Calculate the mean number of steps per day
+mean(totalbydayImp$imp)
+
+#Calculate the median number of steps per day
+median(totalbydayImp$imp)
+
+#Add a column to determine if the date is a weekday or weekend
+#First figure the day of the week
+data$day=weekdays(data$date)
+#then determine if that day is a weekday
+data$weekdays=ifelse((data$day %in% c("Monday","Tuesday", "Wednesday", "Thursday", "Friday")),"Weekday", "Weekend")
+#Now make it a factor variable
+data$weekdays=as.factor(data$weekdays)
+
+
+library("lattice")
+weekday=subset(data, data$weekdays=="Weekday")
+weekend=subset(data, data$weekdays=="Weekend")
+
+par(mfrow=c(2,1))
+avgstepsWD=aggregate(steps~interval, weekday, FUN=mean)
+avgstepsWE=aggregate(steps~interval, weekend, FUN=mean)
+plot(avgstepsWD$interval, avgstepsWD$steps, type="l")
+plot(avgstepsWE$interval, avgstepsWE$steps, type="l")
+```
